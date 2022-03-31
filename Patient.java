@@ -5,6 +5,7 @@ public class Patient{
 	private String patientID;
 	private String firstName;
 	private String lastName;
+	private String sex;
 	private String phoneNum;
 	private Address address;
 	private Doctor doctor;
@@ -12,11 +13,12 @@ public class Patient{
 	private ArrayList<Procedures> procedureList = new ArrayList<Procedures>();
 	
 	
-	public Patient(String patientID, String firstName, String lastName, String phoneNum, Address address, Doctor doctor) {
+	public Patient(String patientID, String firstName, String lastName,String sex, String phoneNum, Address address, Doctor doctor) {
 		super();
 		this.patientID = patientID;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.sex = sex;
 		this.phoneNum = phoneNum;
 		this.address = address;
 		this.doctor = doctor;
@@ -102,26 +104,33 @@ public class Patient{
 	}
 
 
+	public String getSex() {
+		return sex;
+	}
+
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+
 	@Override
 	public String toString() {
 		
-		String procedureString = "";
+		StringBuilder proList = new StringBuilder();
 		
-		for (Procedures procedures: procedureList) {
-			
-			
-			procedureString += procedures.getProcedureName() + " " +  procedures.getProcedureNotes() + " " + procedures.getContraMedication() + ",";
+		for(Procedures procedure: procedureList) {
+			proList.append(procedure).append(" ");
 		}
 		
-		String TPlanString = "";
+		StringBuilder TPlanString = new StringBuilder();
 		
 		for(TreatmentPlan tPlan: treatmentPlan) {
-			TPlanString += "Current Medications: " + tPlan.getCurrentMecications() + "\nMedication Allergies: " + tPlan.getMedicationAllergies()
-			+ "\nDoctors Notes: " + tPlan.getDoctorsNotes();
+			TPlanString.append(tPlan).append(" ");
 		}
 		
-		return "Patient ID: " + patientID + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nPhone Number: "
-				+ phoneNum + "\nAddress: " + address + "\nDoctor: " + doctor.getFirstName() + " " + doctor.getLastName() + "\n\nProcedures:\n\n" + getProcedureList().toString()
-				+  "\n\nTreatment Plan:" + TPlanString;
+		return "Patient ID: " + patientID + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nSex: " + sex + "\nPhone Number: " 
+				+ phoneNum + "\nAddress: " + address + "\nDoctor: " + doctor.getFirstName() + " " + doctor.getLastName() + "\n\nProcedures:\n" + proList
+				+  "\n\nTreatment Plan:\n" + TPlanString;
 	}
 }

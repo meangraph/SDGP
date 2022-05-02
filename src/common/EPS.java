@@ -1,8 +1,15 @@
+package common;
+import views.LandingPage;
+import java.util.ArrayList;
+
+
 
 public class EPS {
 
 	public static void main(String[] args) {
-		
+	Database database = new Database();
+	LandingPage gui = new LandingPage();
+	gui.setVisible(true);
 	Address address1 = new Address("51","Fake Street","Wollongong","NSW", "2000");	
 	Doctor doctor1 = new Doctor("0231","Brendan","Alderton", address1);
 	
@@ -27,8 +34,7 @@ public class EPS {
 	
 	//System.out.println(procedure1); //Procedure working fine
 	
-	Patient patient1 = new Patient("677016", "Brendan", "Alderton","Male" ,"0435888999", address1, doctor1);
-	
+	Patient patient1 = new Patient("677016",1233212, "Brendan", "Alderton","Male" ,"0435888999", address1, doctor1);
 	patient1.setProcedureList(procedure1);
 	
 	TreatmentPlan treatmentPlan1 = new TreatmentPlan();
@@ -47,15 +53,21 @@ public class EPS {
 	//System.out.println(treatmentPlan1);
 	
 	patient1.setTreatmentPlan(treatmentPlan1);
+	patient1.setHealthCareCard(120334823);
 	
-	//System.out.println(patient1);//works good now
+	database.setPatients(patient1);
+	
+	System.out.println(patient1);//works good now
+	System.out.println(patient1.getHealthCareCard());
 	
 	Pharmacy pharmacy1 = new Pharmacy(3001,address1);
 	
 	pharmacy1.setStockList(medication2, 32);
+	System.out.println(pharmacy1);
+	pharmacy1.dispenceStock(medication2, 2);
 	
 	System.out.println(pharmacy1);
 	
 	}
-
+	
 }

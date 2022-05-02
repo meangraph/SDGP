@@ -1,27 +1,62 @@
+package common;
 import java.util.ArrayList;
 
 public class Patient{
 
 	private String patientID;
+	private int medicareNumber;//Login ID
 	private String firstName;
 	private String lastName;
 	private String sex;
 	private String phoneNum;
 	private Address address;
 	private Doctor doctor;
+	private int healthCareCard;
+	private int pensionerNumber;
 	private ArrayList<TreatmentPlan> treatmentPlan = new ArrayList<TreatmentPlan>();
 	private ArrayList<Procedures> procedureList = new ArrayList<Procedures>();
 	
 	
-	public Patient(String patientID, String firstName, String lastName,String sex, String phoneNum, Address address, Doctor doctor) {
+	public Patient(String patientID,int medicareNumber, String firstName, String lastName,String sex, String phoneNum, Address address, Doctor doctor) {
 		super();
 		this.patientID = patientID;
+		this.medicareNumber = medicareNumber;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.sex = sex;
 		this.phoneNum = phoneNum;
 		this.address = address;
 		this.doctor = doctor;
+	}
+
+
+	public int getMedicareNumber() {
+		return medicareNumber;
+	}
+
+
+	public int getHealthCareCard() {
+		return healthCareCard;
+	}
+
+
+	public int getPensionerNumber() {
+		return pensionerNumber;
+	}
+
+
+	public void setMedicareNumber(int medicareNumber) {
+		this.medicareNumber = medicareNumber;
+	}
+
+
+	public void setHealthCareCard(int healthCareCard) {
+		this.healthCareCard = healthCareCard;
+	}
+
+
+	public void setPensionerNumber(int pensionerNumber) {
+		this.pensionerNumber = pensionerNumber;
 	}
 
 
@@ -129,7 +164,7 @@ public class Patient{
 			TPlanString.append(tPlan).append(" ");
 		}
 		
-		return "Patient ID: " + patientID + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nSex: " + sex + "\nPhone Number: " 
+		return "Patient ID: " + patientID + "\nMedicare Number: " + medicareNumber +"\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nSex: " + sex + "\nPhone Number: " 
 				+ phoneNum + "\nAddress: " + address + "\nDoctor: " + doctor.getFirstName() + " " + doctor.getLastName() + "\n\nProcedures:\n" + proList
 				+  "\n\nTreatment Plan:\n" + TPlanString;
 	}

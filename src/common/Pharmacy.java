@@ -1,3 +1,4 @@
+package common;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,10 @@ public class Pharmacy {
 	public void setStockList(Medication x, int y) {
 		stockList.put(x, y);
 	}
-	
+	public void dispenceStock(Medication x,int y) {
+		int currentStock = stockList.get(x);
+		stockList.put(x, currentStock-y);
+	}
 	@Override
 	public String toString() {
 		

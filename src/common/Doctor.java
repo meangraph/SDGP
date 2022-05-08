@@ -1,8 +1,13 @@
 package common;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Doctor {
+public class Doctor implements Serializable{
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String doctorID;
 	private String firstName, lastName;
 	private Address address; //address of the doctors workplace

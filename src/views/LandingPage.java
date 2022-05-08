@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import common.Database;
 
 import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
@@ -57,6 +56,8 @@ public class LandingPage extends JFrame {
 		JButton btnNewUser = new JButton("New Patient");
 		btnNewUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				SignUp signUpPage = new SignUp();
+				signUpPage.setVisible(true);
 			}
 		});
 		

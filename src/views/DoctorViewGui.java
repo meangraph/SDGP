@@ -1,5 +1,4 @@
 package views;
-import common.Database;
 import common.Patient;
 import java.awt.EventQueue;
 import java.util.ArrayList;
@@ -15,9 +14,15 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import java.io.*;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JList;
 
 public class DoctorViewGui extends JFrame {
 
@@ -67,6 +72,20 @@ public class DoctorViewGui extends JFrame {
 				.addComponent(tabbedPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
 		);
 		
+		try {
+			FileInputStream patients = new FileInputStream("patients.txt");
+			ObjectInputStream objectIn = new ObjectInputStream(patients);
+			
+			ArrayList<Patient> patientList = (ArrayList<Patient>) objectIn.readObject();
+			
+			currentPatient = patientList.get(1);
+			objectIn.close();
+			
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		ImageIcon homeIcon = new ImageIcon(Objects.requireNonNull(
                 this.getClass().getResource("/resources/homeicon_24.png")));
 		
@@ -75,52 +94,58 @@ public class DoctorViewGui extends JFrame {
 		
 		JLabel lblFName = new JLabel("First Name:");
 		
-		JLabel lblPFName = new JLabel("Test");
+		JLabel lblPFName = new JLabel(currentPatient.getFirstName());
 		lblPFName.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
 		JLabel lblLName = new JLabel("Last Name:");
 		
-		JLabel lblPLName = new JLabel("Test");
+		JLabel lblPLName = new JLabel(currentPatient.getLastName());
 		lblPLName.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
 		JLabel lblAge = new JLabel("Age:");
 		
-		JLabel lblPAge = new JLabel("Test");
+		JLabel lblPAge = new JLabel(currentPatient.getAge());
 		
 		JLabel lblSex = new JLabel("Sex:");
 		
-		JLabel lblPSex = new JLabel("Test");
+		JLabel lblPSex = new JLabel(currentPatient.getSex());
 		
 		JSeparator separator = new JSeparator();
 		
 		JLabel lblNationality = new JLabel("Nationality:");
 		
-		JLabel lblPNationality = new JLabel("Test");
+		JLabel lblPNationality = new JLabel(currentPatient.getNationallity());
 		
 		JLabel lblMobileNumber = new JLabel("Mobile Number:");
 		
-		JLabel lblPMobileNumber = new JLabel("Test");
+		JLabel lblPMobileNumber = new JLabel(currentPatient.getPhoneNum());
 		lblPMobileNumber.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		JLabel lblEmail = new JLabel("E-Mail:");
 		
-		JLabel lblPEmailAddress = new JLabel("Test");
+		JLabel lblPEmailAddress = new JLabel(currentPatient.getEmailAddress());
 		lblPEmailAddress.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		txtMedicareNumber = new JTextField();
 		txtMedicareNumber.setBackground(Color.LIGHT_GRAY);
 		txtMedicareNumber.setEditable(false);
-		txtMedicareNumber.setText("Medicare Number:");
+		txtMedicareNumber.setText("Medicare Number: " + currentPatient.getMedicareNumber());
 		txtMedicareNumber.setColumns(10);
 		
 		txtPrivateHeathcareNumber = new JTextField();
-		txtPrivateHeathcareNumber.setText("Private Heathcare Number:");
+		txtPrivateHeathcareNumber.setText("Private Heathcare Number: " + currentPatient.getPrivateHealthCareNumber());
+		if (currentPatient.getPrivateHealthCareNumber() == 0) {
+			txtPrivateHeathcareNumber.setVisible(false);
+		}
 		txtPrivateHeathcareNumber.setEditable(false);
 		txtPrivateHeathcareNumber.setColumns(10);
 		txtPrivateHeathcareNumber.setBackground(Color.LIGHT_GRAY);
 		
 		txtPensionerNumber = new JTextField();
-		txtPensionerNumber.setText("Pensioner Number:");
+		txtPensionerNumber.setText("Pensioner Number: " + currentPatient.getPensionerNumber());
+		if (currentPatient.getPensionerNumber() == 0) {
+			txtPensionerNumber.setVisible(false);
+		}
 		txtPensionerNumber.setEditable(false);
 		txtPensionerNumber.setColumns(10);
 		txtPensionerNumber.setBackground(Color.LIGHT_GRAY);
@@ -129,7 +154,7 @@ public class DoctorViewGui extends JFrame {
 		lblDiagnosis.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDiagnosis.setForeground(Color.DARK_GRAY);
 		
-		JLabel lblPDiagnosis = new JLabel("No active diagnosis for this patient");
+		JLabel lblPDiagnosis = new JLabel(currentPatient.getDiagnosis());
 		
 		JSeparator separator_1 = new JSeparator();
 		
@@ -146,14 +171,14 @@ public class DoctorViewGui extends JFrame {
 		lblCurrentMedications.setForeground(Color.DARK_GRAY);
 		lblCurrentMedications.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JTextArea taCurrentMedications = new JTextArea();
+		JTextArea taCurrentMedications = new JTextArea(currentPatient.getCurrentMeds());
 		taCurrentMedications.setEditable(false);
 		
-		JLabel lblAllergies = new JLabel("Allergies:");
+		JLabel lblAllergies = new JLabel("Allergies: " + currentPatient.getMedAllergies());
 		lblAllergies.setForeground(Color.DARK_GRAY);
 		lblAllergies.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JLabel lblPAllergies = new JLabel("N/A");
+		JLabel lblPAllergies = new JLabel();
 		
 		JSeparator separator_3 = new JSeparator();
 		
@@ -163,7 +188,7 @@ public class DoctorViewGui extends JFrame {
 		lblAdditionalNotes.setForeground(Color.DARK_GRAY);
 		lblAdditionalNotes.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JTextArea taAdditionalNotes = new JTextArea();
+		JTextArea taAdditionalNotes = new JTextArea(currentPatient.getTreatmentPlan(0).getDoctorsNotes());
 		taAdditionalNotes.setEditable(false);
 		GroupLayout gl_panelHome = new GroupLayout(panelHome);
 		gl_panelHome.setHorizontalGroup(
@@ -178,70 +203,68 @@ public class DoctorViewGui extends JFrame {
 					.addGap(18)
 					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelHome.createSequentialGroup()
-							.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panelHome.createSequentialGroup()
-									.addComponent(lblPSex)
-									.addPreferredGap(ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-									.addComponent(lblEmail))
-								.addGroup(gl_panelHome.createSequentialGroup()
-									.addComponent(lblPAge, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblMobileNumber))
-								.addGroup(gl_panelHome.createSequentialGroup()
-									.addComponent(lblPFName, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(lblLName, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)))
+							.addComponent(lblPSex)
+							.addPreferredGap(ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+							.addComponent(lblEmail))
+						.addGroup(gl_panelHome.createSequentialGroup()
+							.addComponent(lblPFName, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
+							.addComponent(lblLName, GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
+						.addGroup(gl_panelHome.createSequentialGroup()
+							.addComponent(lblPAge, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblMobileNumber))
+						.addComponent(lblPNationality, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelHome.createSequentialGroup()
 							.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblPEmailAddress, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblPMobileNumber, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblPLName, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
 							.addGap(164)
 							.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
 								.addComponent(txtMedicareNumber, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
 								.addComponent(txtPrivateHeathcareNumber, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtPensionerNumber, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE))
-							.addGap(40))
-						.addGroup(gl_panelHome.createSequentialGroup()
-							.addComponent(lblPNationality, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
+								.addComponent(txtPensionerNumber, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(lblPEmailAddress, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
+					.addGap(40))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblDiagnosis)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPDiagnosis)
-					.addContainerGap(575, Short.MAX_VALUE))
+					.addContainerGap(682, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
 					.addContainerGap())
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblMedicalHistory)
-					.addContainerGap(717, Short.MAX_VALUE))
+					.addContainerGap(713, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addComponent(separator_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(786))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblCurrentMedications)
-					.addContainerGap(687, Short.MAX_VALUE))
+					.addContainerGap(683, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(taCurrentMedications, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(47, Short.MAX_VALUE))
+					.addContainerGap(43, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblAllergies)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPAllergies, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(364, Short.MAX_VALUE))
+					.addContainerGap(291, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
-					.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
+					.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
 					.addContainerGap())
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(taMedicalHistory, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(47, Short.MAX_VALUE))
+					.addContainerGap(43, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addGroup(gl_panelHome.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(separator_4, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -250,11 +273,11 @@ public class DoctorViewGui extends JFrame {
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblAdditionalNotes)
-					.addContainerGap(709, Short.MAX_VALUE))
+					.addContainerGap(705, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(taAdditionalNotes, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(47, Short.MAX_VALUE))
+					.addContainerGap(43, Short.MAX_VALUE))
 		);
 		gl_panelHome.setVerticalGroup(
 			gl_panelHome.createParallelGroup(Alignment.LEADING)
@@ -343,6 +366,44 @@ public class DoctorViewGui extends JFrame {
 					.addContainerGap(444, Short.MAX_VALUE))
 		);
 		panelPastPrescriptions.setLayout(gl_panelPastPrescriptions);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		tabbedPane.addTab("+Create New Treatment Plan", null, panel, null);
+		
+		JLabel lblFullName = new JLabel("Patient's Name");
+		
+		JLabel lblPFullName = new JLabel(currentPatient.getFirstName() + " " + currentPatient.getLastName());
+		
+		JLabel lblMedicareNo = new JLabel("Medicare No:");
+		String medicareNum = Integer.toString(currentPatient.getMedicareNumber());
+		JLabel lblPMedicareNumber = new JLabel(medicareNum);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(37)
+					.addComponent(lblFullName)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblPFullName, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
+					.addComponent(lblMedicareNo, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblPMedicareNumber, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+					.addGap(31))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(30)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblFullName)
+						.addComponent(lblPFullName)
+						.addComponent(lblMedicareNo)
+						.addComponent(lblPMedicareNumber))
+					.addContainerGap(469, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 	}
 }

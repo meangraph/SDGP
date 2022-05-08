@@ -1,30 +1,53 @@
 package common;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TreatmentPlan{
+public class TreatmentPlan implements Serializable{
 	
-	private ArrayList<Medication> currentMedications = new ArrayList<Medication>();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Medication> medicationAllergies = new ArrayList<Medication>();
 	private ArrayList<String> doctorsNotes = new ArrayList<String>();
-	private ArrayList<String> dosage = new ArrayList<String>();
+	
 
 	public TreatmentPlan() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ArrayList<Medication> getCurrentMecications() {
-		return currentMedications;
-	}
-	public ArrayList<Medication> getMedicationAllergies() {
-		return medicationAllergies;
+	public String getMedicationAllergies() {
+		
+		if (medicationAllergies.isEmpty()) {
+			return "No medication allergies";
+		}
+		
+		else {
+		String medsAllergies = "";
+		for (int i = 0; i < medicationAllergies.size(); i++) {
+			medsAllergies += medicationAllergies.get(i).getBrandName();
+		}
+		
+		return medsAllergies;
+		}
 	}
 
-	public ArrayList<String> getDoctorsNotes() {
-		return doctorsNotes;
+	public String getDoctorsNotes() {
+		String notes = "";
+		
+		if (doctorsNotes.isEmpty()) {
+			notes = "No current doctors notes";
+			return notes;
+		} else {
+			for (int i = 0; i < doctorsNotes.size();i++) {
+				notes += doctorsNotes.get(i) + "\n";
+			}
+			return notes;
+		}
 	}
-	public void setCurrentMecications(Medication x) {
-		currentMedications.add(x);
-	}
+
 	public void setMedicationAllergies(Medication x) {
 		medicationAllergies.add(x);
 	}
@@ -33,29 +56,14 @@ public class TreatmentPlan{
 		doctorsNotes.add(x);
 	}
 
-	public ArrayList<String> getDosage() {
-		return dosage;
-	}
-
-	public void setDosage(String x) {
-		dosage.add(x);
-	}
-
-	public void removeCurrentMedication(Medication x) {
-		
-		int y = currentMedications.indexOf(x);//gets index of the medication we are removing
-		currentMedications.remove(x);//remove the medication from the currentMedications list
-		dosage.remove(y);//remove the dosage note at the index of the 
-	}
 	
 	@Override
 	public String toString() {
 		
-		String currentMedList = "";
 		
-		for (int i = 0; i < currentMedications.size();i++) {
-			currentMedList += currentMedications.get(i).getBrandName() + " " + dosage.get(i) + ", ";
-		}
+	//	for (int i = 0; i < currentMedications2.size();i++) {
+	//		currentMedList += currentMedications2.get(i) + " " + dosage.get(i) + ", ";
+	//	}
 		
 		String allergyList = "";
 		
@@ -69,7 +77,7 @@ public class TreatmentPlan{
 			notes += note + ",";
 		}	
 		
-		return "Current Medications: " + currentMedList + "\nAllergies: "
+		return "Current Medications: "  + "\nAllergies: "
 				+ allergyList + "\nDoctors Notes: " + notes + "\n";
 	}
 	

@@ -1,7 +1,13 @@
 package common;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String houseNum,streetName,suburb,state,postCode;
 
 	public Address(String houseNum, String streetName, String suburb, String state, String postCode) {

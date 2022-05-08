@@ -1,8 +1,13 @@
 package common;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Medication{
+public class Medication implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int medicationID;
 	private String brandName, chemicalName;
 	private ArrayList<Medication> medications = new ArrayList<Medication>();
@@ -52,10 +57,9 @@ public class Medication{
 		String medList = "";
 		
 		for(Medication meds: medications) {
-			medList += meds.getBrandName() + ", ";
+			medList += meds.getBrandName();
 		}
 		
-		return "Brand Name: " + brandName + "\nChemical Name: " + chemicalName + "\nContra Medications: "
-				+ medList + "\nMedication ID: " + medicationID + "\n";
+		return medList;
 	}
 }

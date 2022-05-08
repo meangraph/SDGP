@@ -2,16 +2,37 @@ package common;
 import views.LandingPage;
 import java.util.ArrayList;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+
+import java.io.*;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 
 public class EPS {
 
-	public static void main(String[] args) {
-	Database database = new Database();
+	public static void main(String[] args) throws WriterException, IOException {
+	ArrayList<Patient> patient = new ArrayList<Patient>();
+	ArrayList<Medication> medication = new ArrayList<Medication>();
 	LandingPage gui = new LandingPage();
 	gui.setVisible(true);
 	Address address1 = new Address("51","Fake Street","Wollongong","NSW", "2000");	
 	Doctor doctor1 = new Doctor("0231","Brendan","Alderton", address1);
+	
+	String data = "www.uow.edu.au";
+	String path = "C:\\Users\\B\\eclipse-workspace\\EPS\\src\\test.jpg";
+	
+	
+	BitMatrix matrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 500, 500);
+	
+	MatrixToImageWriter.writeToPath(matrix, "jpg", Paths.get(path));
+	
 	
 	//System.out.println(doctor1); Doctor and Address object fine
 	
@@ -34,28 +55,39 @@ public class EPS {
 	
 	//System.out.println(procedure1); //Procedure working fine
 	
-	Patient patient1 = new Patient("677016",1233212, "Brendan", "Alderton","Male" ,"0435888999", address1, doctor1);
+	Patient patient1 = new Patient("677016",1233212, "Brendan", "Alderton","Male" ,"0435888999", address1, doctor1,"Australian");
 	patient1.setProcedureList(procedure1);
+	Patient patient2 = new Patient("6777016",555555,"Jack","White","Female","053254323",address1,doctor1,"New Zealand");
 	
 	TreatmentPlan treatmentPlan1 = new TreatmentPlan();
-	treatmentPlan1.setDoctorsNotes("Test note for Treatments");
-	treatmentPlan1.setCurrentMecications(medication2);
-	treatmentPlan1.setDosage("30mg/When needed");
 	treatmentPlan1.setMedicationAllergies(medication1);
-	treatmentPlan1.setCurrentMecications(medication1);
-	treatmentPlan1.setDosage("40mg/ every hour");
+	treatmentPlan1.setDoctorsNotes("Test for doctors notes");
+	String dob1 = "01/08/1985";
+	String dob2 = "20/11/1992";
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	try {
+		patient1.setDob(formatter.parse(dob1));
+		patient2.setDob(formatter.parse(dob2));
+	} catch (ParseException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 
+	patient1.addDiagnosis("Big old goofy head");
+	patient1.addMedications(medication2, "40mg taken when needed");
+	patient1.addMedications(medication1, "Whenever you feel like fam");
 	
 	//System.out.println(treatmentPlan1);
 	
-	treatmentPlan1.removeCurrentMedication(medication2);
 	
 	//System.out.println(treatmentPlan1);
 	
 	patient1.setTreatmentPlan(treatmentPlan1);
 	patient1.setHealthCareCard(120334823);
 	
-	database.setPatients(patient1);
+	TreatmentPlan tplan2 = new TreatmentPlan();
+	patient2.setTreatmentPlan(tplan2);
+	
 	
 	System.out.println(patient1);//works good now
 	System.out.println(patient1.getHealthCareCard());
@@ -66,7 +98,37 @@ public class EPS {
 	System.out.println(pharmacy1);
 	pharmacy1.dispenceStock(medication2, 2);
 	
+	patient1.setEmailAdress("ba449@uowmail.edu.au");
 	System.out.println(pharmacy1);
+	
+	patient.add(patient2);
+	patient.add(patient1);
+	medication.add(medication1);
+	medication.add(medication2);
+	medication.add(medication2);
+	medication.add(medication2);
+	medication.add(medication2);
+	medication.add(medication2);
+	medication.add(medication2);
+	
+	
+	
+	try {
+		FileOutputStream patients = new FileOutputStream("patients.txt");
+		FileOutputStream medications = new FileOutputStream("medications.txt");
+		
+		ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
+		ObjectOutputStream medicationOutput = new ObjectOutputStream(medications);
+		
+		patientsOutput.writeObject(patient);
+		medicationOutput.writeObject(medication);
+		patientsOutput.close();
+		medicationOutput.close();
+		
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 	}
 	

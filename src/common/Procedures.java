@@ -1,8 +1,13 @@
 package common;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Procedures{
+public class Procedures implements Serializable{
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String procedureName;
 	private ArrayList<String> procedureNotes = new ArrayList<String>();
 	private ArrayList<Medication> contraMedication = new ArrayList<Medication>();

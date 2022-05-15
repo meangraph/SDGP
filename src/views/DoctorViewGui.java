@@ -78,7 +78,7 @@ public class DoctorViewGui extends JFrame {
 			
 			ArrayList<Patient> patientList = (ArrayList<Patient>) objectIn.readObject();
 			
-			currentPatient = patientList.get(1);
+			currentPatient = patientList.get(2);
 			objectIn.close();
 			
 		} catch (IOException | ClassNotFoundException e) {
@@ -136,7 +136,7 @@ public class DoctorViewGui extends JFrame {
 		txtPrivateHeathcareNumber.setText("Private Heathcare Number: " + currentPatient.getPrivateHealthCareNumber());
 		if (currentPatient.getPrivateHealthCareNumber() == 0) {
 			txtPrivateHeathcareNumber.setVisible(false);
-		}
+		} 
 		txtPrivateHeathcareNumber.setEditable(false);
 		txtPrivateHeathcareNumber.setColumns(10);
 		txtPrivateHeathcareNumber.setBackground(Color.LIGHT_GRAY);
@@ -145,7 +145,7 @@ public class DoctorViewGui extends JFrame {
 		txtPensionerNumber.setText("Pensioner Number: " + currentPatient.getPensionerNumber());
 		if (currentPatient.getPensionerNumber() == 0) {
 			txtPensionerNumber.setVisible(false);
-		}
+		} 
 		txtPensionerNumber.setEditable(false);
 		txtPensionerNumber.setColumns(10);
 		txtPensionerNumber.setBackground(Color.LIGHT_GRAY);
@@ -162,17 +162,11 @@ public class DoctorViewGui extends JFrame {
 		lblMedicalHistory.setForeground(Color.DARK_GRAY);
 		lblMedicalHistory.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JTextArea taMedicalHistory = new JTextArea();
-		taMedicalHistory.setEditable(false);
-		
 		JSeparator separator_2 = new JSeparator();
 		
 		JLabel lblCurrentMedications = new JLabel("Current Medications:");
 		lblCurrentMedications.setForeground(Color.DARK_GRAY);
 		lblCurrentMedications.setFont(new Font("Tahoma", Font.BOLD, 11));
-		
-		JTextArea taCurrentMedications = new JTextArea(currentPatient.getCurrentMeds());
-		taCurrentMedications.setEditable(false);
 		
 		JLabel lblAllergies = new JLabel("Allergies: " + currentPatient.getMedAllergies());
 		lblAllergies.setForeground(Color.DARK_GRAY);
@@ -188,8 +182,11 @@ public class DoctorViewGui extends JFrame {
 		lblAdditionalNotes.setForeground(Color.DARK_GRAY);
 		lblAdditionalNotes.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JTextArea taAdditionalNotes = new JTextArea(currentPatient.getTreatmentPlan(0).getDoctorsNotes());
-		taAdditionalNotes.setEditable(false);
+		JScrollPane spCurrentMeds = new JScrollPane();
+		
+		JScrollPane spMedicalHistory = new JScrollPane();
+		
+		JScrollPane spAdditionalNotes = new JScrollPane();
 		GroupLayout gl_panelHome = new GroupLayout(panelHome);
 		gl_panelHome.setHorizontalGroup(
 			gl_panelHome.createParallelGroup(Alignment.LEADING)
@@ -204,12 +201,12 @@ public class DoctorViewGui extends JFrame {
 					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelHome.createSequentialGroup()
 							.addComponent(lblPSex)
-							.addPreferredGap(ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 807, Short.MAX_VALUE)
 							.addComponent(lblEmail))
 						.addGroup(gl_panelHome.createSequentialGroup()
 							.addComponent(lblPFName, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(lblLName, GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
+							.addComponent(lblLName, GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE))
 						.addGroup(gl_panelHome.createSequentialGroup()
 							.addComponent(lblPAge, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -233,38 +230,38 @@ public class DoctorViewGui extends JFrame {
 					.addComponent(lblDiagnosis)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPDiagnosis)
-					.addContainerGap(682, Short.MAX_VALUE))
+					.addContainerGap(1412, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 1530, Short.MAX_VALUE)
 					.addContainerGap())
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblMedicalHistory)
-					.addContainerGap(713, Short.MAX_VALUE))
+					.addContainerGap(1443, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addComponent(separator_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(786))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblCurrentMedications)
-					.addContainerGap(683, Short.MAX_VALUE))
+					.addContainerGap(1413, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(taCurrentMedications, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(43, Short.MAX_VALUE))
+					.addComponent(spCurrentMeds, GroupLayout.PREFERRED_SIZE, 758, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(772, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblAllergies)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPAllergies, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(291, Short.MAX_VALUE))
+					.addContainerGap(1021, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
-					.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+					.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 1530, Short.MAX_VALUE)
 					.addContainerGap())
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(taMedicalHistory, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(43, Short.MAX_VALUE))
+					.addComponent(spMedicalHistory, GroupLayout.PREFERRED_SIZE, 756, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(774, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addGroup(gl_panelHome.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(separator_4, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -273,11 +270,11 @@ public class DoctorViewGui extends JFrame {
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblAdditionalNotes)
-					.addContainerGap(705, Short.MAX_VALUE))
+					.addContainerGap(1435, Short.MAX_VALUE))
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(taAdditionalNotes, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(43, Short.MAX_VALUE))
+					.addComponent(spAdditionalNotes, GroupLayout.PREFERRED_SIZE, 757, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(773, Short.MAX_VALUE))
 		);
 		gl_panelHome.setVerticalGroup(
 			gl_panelHome.createParallelGroup(Alignment.LEADING)
@@ -323,15 +320,17 @@ public class DoctorViewGui extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblMedicalHistory)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(taMedicalHistory, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator_4, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
-					.addGap(2)
-					.addComponent(separator_2, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelHome.createSequentialGroup()
+							.addGap(62)
+							.addComponent(separator_4, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+							.addGap(2)
+							.addComponent(separator_2, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE))
+						.addComponent(spMedicalHistory, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblCurrentMedications)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(taCurrentMedications, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+					.addComponent(spCurrentMeds, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panelHome.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAllergies)
@@ -341,9 +340,33 @@ public class DoctorViewGui extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblAdditionalNotes)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(taAdditionalNotes, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(43, Short.MAX_VALUE))
+					.addComponent(spAdditionalNotes, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(37, Short.MAX_VALUE))
 		);
+		
+		
+		
+		JTextArea taAdditionalNotes = new JTextArea();
+		spAdditionalNotes.setViewportView(taAdditionalNotes);
+		if (currentPatient.getTreatmentPlan().isEmpty()) {
+			taAdditionalNotes.setText("No current treament plan");
+		} else {
+			taAdditionalNotes.setText(currentPatient.getTreatmentPlanData(0).getDoctorsNotes());
+		}
+		taAdditionalNotes.setEditable(false);
+		
+		JTextArea taMedicalHistory = new JTextArea();
+		spMedicalHistory.setViewportView(taMedicalHistory);
+		if (currentPatient.getDiagnosisList().isEmpty()) {
+			taMedicalHistory.setText("No current medical history avalible");
+		} else {
+			taMedicalHistory.setText(currentPatient.getDiagnosisList());
+		}
+		taMedicalHistory.setEditable(false);
+		
+		JTextArea taCurrentMedications = new JTextArea(currentPatient.getCurrentMeds());
+		taCurrentMedications.setEditable(false);
+		spCurrentMeds.setViewportView(taCurrentMedications);
 		panelHome.setLayout(gl_panelHome);
 		
 		JPanel panelPastPrescriptions = new JPanel();

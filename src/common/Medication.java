@@ -10,6 +10,7 @@ public class Medication implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int medicationID;
 	private String brandName, chemicalName;
+	private boolean controlled;
 	private ArrayList<Medication> medications = new ArrayList<Medication>();
 	private ArrayList<Medication> contraMedications = new ArrayList<Medication>();
 	public Medication(int medicationID,String brandName, String chemicalName) {
@@ -50,6 +51,22 @@ public class Medication implements Serializable{
 	}
 	public void setMedicationID(int medicationID) {
 		this.medicationID = medicationID;
+	}
+	
+	
+	public String isControlled() {
+		String prescribed = "";
+		if (controlled == true) {
+			prescribed = "Yes";
+		}
+		if (controlled == false) {
+			prescribed = "No";
+		}
+		
+		return prescribed;
+	}
+	public void setControlled(boolean controlled) {
+		this.controlled = controlled;
 	}
 	@Override
 	public String toString() {

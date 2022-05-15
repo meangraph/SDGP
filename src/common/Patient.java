@@ -1,5 +1,7 @@
 package common;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -7,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Patient implements Serializable{
 
 	
 	private static final long serialVersionUID = 1L;
 	private String patientID;
+	private String password;
 	private int medicareNumber;//Login ID
 	private String firstName;
 	private String lastName;
@@ -109,15 +113,27 @@ public class Patient implements Serializable{
 	}
 
 
-	public TreatmentPlan getTreatmentPlan(int x) {
+	public TreatmentPlan getTreatmentPlanData(int x) {
 		return treatmentPlan.get(x);
 	}
 
+
+	public ArrayList<TreatmentPlan> getTreatmentPlan() {
+		return treatmentPlan;
+	}
 
 	public void setPatientID(String patientID) {
 		this.patientID = patientID;
 	}
 
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -191,6 +207,7 @@ public class Patient implements Serializable{
 
 	public void setDob(Date dob) {
 		this.dob = dob;
+		
 	}
 	
 	public void addDiagnosis(String x) {
@@ -198,6 +215,16 @@ public class Patient implements Serializable{
 	}
 	
 	public String getDiagnosis() {
+		String diag = "";
+		if (diagnosisList.isEmpty()) {
+			diag = "No active diagnosis for this patient";
+		} else {
+			diag = diagnosisList.get(diagnosisList.size()-1);
+			}
+		return diag;
+	}
+	
+	public String getDiagnosisList() {
 		String diag = "";
 		if (diagnosisList.isEmpty()) {
 			diag = "No active diagnosis for this patient";
@@ -238,6 +265,8 @@ public class Patient implements Serializable{
 		currentMedications.put(x, y);
 	}
 	
+	
+
 	public String getCurrentMeds() {
 		String currentMeds = "";
 		
@@ -258,7 +287,7 @@ public class Patient implements Serializable{
 			allergies = "No allergies for this patient";
 		} else {
 			for (int i = 0; i < medAllergies.size(); i++) {
-				allergies += medAllergies.get(i).getBrandName();
+				allergies += medAllergies.get(i).getBrandName() + ", ";
 			}
 		}
 		return allergies;

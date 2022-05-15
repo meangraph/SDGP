@@ -38,6 +38,8 @@ public class EPS {
 	
 	Medication medication1 = new Medication(100,"Panadol","Paracitamol");
 	Medication medication2 = new Medication(101,"Asprin","Yeet");
+	medication1.setControlled(false);
+	medication2.setControlled(false);
 	
 	medication1.setMedications(medication1);
 	medication2.setMedications(medication2);
@@ -101,34 +103,54 @@ public class EPS {
 	patient1.setEmailAdress("ba449@uowmail.edu.au");
 	System.out.println(pharmacy1);
 	
+	patient1.setPrivateHealthCareNumber(2312312);
+	
 	patient.add(patient2);
 	patient.add(patient1);
 	medication.add(medication1);
 	medication.add(medication2);
-	medication.add(medication2);
-	medication.add(medication2);
-	medication.add(medication2);
-	medication.add(medication2);
-	medication.add(medication2);
 	
 	
 	
-	try {
-		FileOutputStream patients = new FileOutputStream("patients.txt");
-		FileOutputStream medications = new FileOutputStream("medications.txt");
+	
+//	try {
+//		FileInputStream patients = new FileInputStream("patients.txt");
+//		ObjectInputStream objectIn = new ObjectInputStream(patients);
+//		
+//		ArrayList<Patient> patientList = (ArrayList<Patient>) objectIn.readObject();
+//		
+//		System.out.println(patientList.size());
+//		
+//		for (int i = 0; i < patientList.size();i++) {
+//			System.out.println(patientList.get(i).getFirstName());
+//			System.out.println(patientList.get(i).getPensionerNumber());
+//		}
+//		
+//		objectIn.close();
+//		
+//	} catch (IOException | ClassNotFoundException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+	
+	
+	
+	//try {
+		//FileOutputStream patients = new FileOutputStream("patients.txt");
+		//FileOutputStream medications = new FileOutputStream("medications.txt");
 		
-		ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
-		ObjectOutputStream medicationOutput = new ObjectOutputStream(medications);
+		//ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
+		//ObjectOutputStream medicationOutput = new ObjectOutputStream(medications);
 		
-		patientsOutput.writeObject(patient);
-		medicationOutput.writeObject(medication);
-		patientsOutput.close();
-		medicationOutput.close();
+	//	patientsOutput.writeObject(patient);
+		//medicationOutput.writeObject(medication);
+	//	patientsOutput.close();
+		//medicationOutput.close();
 		
-	} catch (IOException e) {
+//	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+//		e.printStackTrace();
+//	}
 	
 	}
 	

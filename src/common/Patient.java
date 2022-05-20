@@ -23,7 +23,6 @@ public class Patient implements Serializable{
 	private String sex;
 	private String phoneNum;
 	private Address address;
-	private Doctor doctor;
 	private int healthCareCard;
 	private int pensionerNumber;
 	private String emailAddress;
@@ -35,6 +34,7 @@ public class Patient implements Serializable{
 	private ArrayList<TreatmentPlan> treatmentPlan = new ArrayList<TreatmentPlan>();
 	private ArrayList<Procedures> procedureList = new ArrayList<Procedures>();
 	private ArrayList<String> diagnosisList = new ArrayList<String>();
+	private ArrayList<String> frequency = new ArrayList<String>();
 	
 	
 	public Patient() {}
@@ -48,7 +48,6 @@ public class Patient implements Serializable{
 		this.sex = sex;
 		this.phoneNum = phoneNum;
 		this.address = address;
-		this.doctor = doctor;
 		this.nationallity = nationallity;
 	}
 
@@ -108,10 +107,6 @@ public class Patient implements Serializable{
 	}
 
 
-	public Doctor getDoctor() {
-		return doctor;
-	}
-
 
 	public TreatmentPlan getTreatmentPlanData(int x) {
 		return treatmentPlan.get(x);
@@ -154,10 +149,6 @@ public class Patient implements Serializable{
 		this.address = address;
 	}
 
-
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
 
 
 	public void setTreatmentPlan(TreatmentPlan x) {
@@ -228,15 +219,33 @@ public class Patient implements Serializable{
 		String diag = "";
 		if (diagnosisList.isEmpty()) {
 			diag = "No active diagnosis for this patient";
+			return diag;
 		} else {
 			for (String i : diagnosisList) {
-				diag += i + ",";
+				diag += i + "\n";
 			}
 		}
 		return diag;
 	}
 	
-	
+	public String getDiagnosisListAt(int x) {
+		return diagnosisList.get(x);
+	}
+	public String getFrequency() {
+		String freq = "";
+		if (frequency.isEmpty()) {
+			return freq;
+		}
+		for  (String  i:  frequency) {
+			freq += i;
+		}
+		return freq;
+	}
+
+	public void setFrequency(String x) {
+		frequency.add(x);
+	}
+
 	public int getPrivateHealthCareNumber() {
 		return privateHealthCareNumber;
 	}
@@ -254,11 +263,16 @@ public class Patient implements Serializable{
 		return ageString;
 	}
 	
-	
+	public void removeAllMedications() {
+		currentMedications.clear();
+		frequency.clear();
+	}
 	
 	public void removeCurrentMedication(Medication x) {
 		
 		currentMedications.remove(x);
+		diagnosisList.remove(x);
+		frequency.remove(x);
 	}
 	
 	public void addMedications(Medication x, String y) {
@@ -267,14 +281,24 @@ public class Patient implements Serializable{
 	
 	
 
+	public HashMap<Medication, String> getCurrentMedicationsMap() {
+		return currentMedications;
+	}
+
 	public String getCurrentMeds() {
 		String currentMeds = "";
 		
 		if (currentMedications.isEmpty()) {
 			currentMeds = "No current medication for this patient";
+			return currentMeds;
 		} else {
+			
 			for (Map.Entry<Medication,String> m: currentMedications.entrySet()) {
-				currentMeds += ((Medication)m.getKey()).getBrandName() + ", " + m.getValue() + "\n";
+				for (int i = 0; i < diagnosisList.size();i++) {
+					int index = 0;
+				currentMeds += ((Medication)m.getKey()).getBrandName() + ": " + m.getValue() + " " + frequency.get(index) + " for " + diagnosisList.get(index) + "\n";
+				index++;
+			}
 			}
 		} return currentMeds;
 	}
@@ -287,12 +311,21 @@ public class Patient implements Serializable{
 			allergies = "No allergies for this patient";
 		} else {
 			for (int i = 0; i < medAllergies.size(); i++) {
-				allergies += medAllergies.get(i).getBrandName() + ", ";
+				allergies += medAllergies.get(i).getBrandName();
 			}
 		}
 		return allergies;
 	}
-
+	
+	public Medication getMedicationAllergies() {
+		for (Medication i: medAllergies) {
+			return i;
+		}
+		
+		return null;
+		
+	}
+	
 	public void setMedAllergies(Medication x) {
 		medAllergies.add(x);
 	}
@@ -313,7 +346,7 @@ public class Patient implements Serializable{
 		}
 		
 		return "Patient ID: " + patientID + "\nMedicare Number: " + medicareNumber +"\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nSex: " + sex + "\nPhone Number: " 
-				+ phoneNum + "\nAddress: " + address + "\nDoctor: " + doctor.getFirstName() + " " + doctor.getLastName() + "\n\nProcedures:\n" + proList
+				+ phoneNum + "\nAddress: " + address +  "\n\nProcedures:\n" + proList
 				+  "\n\nTreatment Plan:\n" + TPlanString;
 	}
 }

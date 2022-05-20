@@ -7,7 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import common.Doctor;
 import common.Patient;
+import common.Pharmacy;
 
 import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
@@ -24,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -32,6 +35,10 @@ import java.awt.Color;
 import java.awt.Toolkit;
 
 public class LandingPage extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField tfUsername;
 	private JPasswordField passwordField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -112,6 +119,7 @@ public class LandingPage extends JFrame {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				boolean found = false;
 				if (rbPatient.isSelected()) {
 					try {
 						FileInputStream patients = new FileInputStream("patients.txt");
@@ -122,6 +130,7 @@ public class LandingPage extends JFrame {
 						
 						for (int i = 0; i < patientList.size();i++) {
 							if(patientList.get(i).getPatientID().compareTo(tfUsername.getText()) == 0 && patientList.get(i).getPassword().compareTo(passwordField.getText()) == 0){
+								found = true;
 								int index = i;
 								System.out.println(i);
 								JOptionPane.showMessageDialog(null,
@@ -132,18 +141,64 @@ public class LandingPage extends JFrame {
 								dispose();
 								break;
 							
-							} 
-							
-							
-							
-						}
-			
-						
-						
+							} 			
+						}	
 					} catch (IOException | ClassNotFoundException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
+				}
+				if (rbDoctor.isSelected()) {
+					try {
+						FileInputStream doctors = new FileInputStream("doctors.txt");
+						ObjectInputStream doctorIn = new ObjectInputStream(doctors);
+						
+						ArrayList<Doctor> doctorsList = (ArrayList<Doctor>) doctorIn.readObject();
+						doctorIn.close();
+						for(int i = 0; i < doctorsList.size();i++) {
+							if(doctorsList.get(i).getDoctorID().compareTo(tfUsername.getText()) == 0 && doctorsList.get(i).getPassword().compareTo(passwordField.getText()) ==0) {
+								found = true;
+								int index = i;
+								JOptionPane.showMessageDialog(null,
+		                                "User logged in succesfully");
+								
+								DoctorViewGui dview = new DoctorViewGui(index);
+								dview.setVisible(true);
+								dispose();
+								break;
+							} 
+						}
+						
+					}catch (IOException | ClassNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+				}
+				if(rbPharmacy.isSelected()) {
+					try {
+						FileInputStream pharmacy = new FileInputStream("pharmacy.txt");
+						ObjectInputStream pharmacyIn = new ObjectInputStream(pharmacy);
+						ArrayList<Pharmacy> pharmacyList = (ArrayList<Pharmacy>) pharmacyIn.readObject();
+						pharmacyIn.close();
+						for (int i = 0; i < pharmacyList.size();i++) {
+							if(pharmacyList.get(i).getPharmacyID().compareTo(tfUsername.getText()) == 0 && pharmacyList.get(i).getPassword().compareTo(passwordField.getText()) ==0) {
+								found = true;
+								Pharmacy pharmacist = pharmacyList.get(i);
+								JOptionPane.showMessageDialog(null,
+		                                "User logged in succesfully");
+								PharmacyView pharmacyView = new PharmacyView(pharmacist);
+								pharmacyView.setVisible(true);
+								dispose();
+							}
+						}
+					} catch (IOException | ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				if (found == false) {
+					JOptionPane.showMessageDialog(null,
+                            "Invalid username or password");
 				}
 			}
 		});

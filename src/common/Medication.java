@@ -27,8 +27,22 @@ public class Medication implements Serializable{
 	public String getChemicalName() {
 		return chemicalName;
 	}
+	
+	public Medication getContraMeds() {
+		for (Medication i: contraMedications) {
+			return i;
+		}
+		return null;
+	}
+	
 	public String getContraMedications() {
-		return this.getBrandName();
+		String meds = "";
+		
+		for(Medication i : contraMedications) {
+			meds += i.getBrandName();
+		}
+		
+		return meds;
 	}
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;

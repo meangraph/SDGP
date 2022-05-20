@@ -10,29 +10,41 @@ public class TreatmentPlan implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Medication> medicationAllergies = new ArrayList<Medication>();
+	
+	private String diagnosis;
+	private ArrayList<Medication> patientMeds = new ArrayList<>();
 	private ArrayList<String> doctorsNotes = new ArrayList<String>();
 	
 
 	public TreatmentPlan() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
-	public String getMedicationAllergies() {
-		
-		if (medicationAllergies.isEmpty()) {
-			return "No medication allergies";
-		}
-		
-		else {
-		String medsAllergies = "";
-		for (int i = 0; i < medicationAllergies.size(); i++) {
-			medsAllergies += medicationAllergies.get(i).getBrandName();
-		}
-		
-		return medsAllergies;
-		}
+	public String getDiagnosis() {
+		return diagnosis;
 	}
+
+
+
+	public ArrayList<Medication> getPatientMeds() {
+		return patientMeds;
+	}
+
+
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+
+
+	public void setPatientMeds(Medication x) {
+		patientMeds.add(x);
+	}
+
+
 
 	public String getDoctorsNotes() {
 		String notes = "";
@@ -48,9 +60,6 @@ public class TreatmentPlan implements Serializable{
 		}
 	}
 
-	public void setMedicationAllergies(Medication x) {
-		medicationAllergies.add(x);
-	}
 
 	public void setDoctorsNotes(String x) {
 		doctorsNotes.add(x);
@@ -65,11 +74,6 @@ public class TreatmentPlan implements Serializable{
 	//		currentMedList += currentMedications2.get(i) + " " + dosage.get(i) + ", ";
 	//	}
 		
-		String allergyList = "";
-		
-		for(Medication allergy: medicationAllergies) {
-			allergyList += allergy.getBrandName() + ", ";
-		}
 		
 		String notes = "";
 		
@@ -78,7 +82,7 @@ public class TreatmentPlan implements Serializable{
 		}	
 		
 		return "Current Medications: "  + "\nAllergies: "
-				+ allergyList + "\nDoctors Notes: " + notes + "\n";
+				+ "\nDoctors Notes: " + notes + "\n";
 	}
 	
 }

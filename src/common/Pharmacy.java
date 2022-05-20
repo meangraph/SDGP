@@ -1,19 +1,33 @@
 package common;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Pharmacy {
+public class Pharmacy implements Serializable{
 	
-	private int pharmacyID;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String pharmacyID;
+	private String password;
 	private Address address;
 	private HashMap<Medication, Integer> stockList = new HashMap<Medication, Integer>();
-	public Pharmacy(int pharmacyID, Address address) {
+	public Pharmacy(String pharmacyID,String password, Address address) {
 		super();
 		this.pharmacyID = pharmacyID;
+		this.password = password;
 		this.address = address;
 	}
-	public int getPharmacyID() {
+	public String getPharmacyID() {
 		return pharmacyID;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public Address getAddress() {
 		return address;
@@ -21,7 +35,7 @@ public class Pharmacy {
 	public HashMap<Medication, Integer> getStockList() {
 		return stockList;
 	}
-	public void setPharmacyID(int pharmacyID) {
+	public void setPharmacyID(String pharmacyID) {
 		this.pharmacyID = pharmacyID;
 	}
 	public void setAddress(Address address) {

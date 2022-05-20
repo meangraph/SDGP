@@ -20,13 +20,17 @@ public class EPS {
 	public static void main(String[] args) throws WriterException, IOException {
 	ArrayList<Patient> patient = new ArrayList<Patient>();
 	ArrayList<Medication> medication = new ArrayList<Medication>();
+	ArrayList<Doctor> doctors = new ArrayList<Doctor>();
 	LandingPage gui = new LandingPage();
 	gui.setVisible(true);
 	Address address1 = new Address("51","Fake Street","Wollongong","NSW", "2000");	
-	Doctor doctor1 = new Doctor("0231","Brendan","Alderton", address1);
+	Doctor doctor1 = new Doctor("test","test","Brendan","Alderton", address1);
+	doctors.add(doctor1);
 	
+	
+	String imageName = "imagename.jpg";
 	String data = "www.uow.edu.au";
-	String path = "C:\\Users\\B\\eclipse-workspace\\EPS\\src\\test.jpg";
+	String path = "C:\\Users\\B\\eclipse-workspace\\EPS\\QRCodes\\"+imageName;
 	
 	
 	BitMatrix matrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 500, 500);
@@ -62,7 +66,7 @@ public class EPS {
 	Patient patient2 = new Patient("6777016",555555,"Jack","White","Female","053254323",address1,doctor1,"New Zealand");
 	
 	TreatmentPlan treatmentPlan1 = new TreatmentPlan();
-	treatmentPlan1.setMedicationAllergies(medication1);
+	//treatmentPlan1.setMedicationAllergies(medication1);
 	treatmentPlan1.setDoctorsNotes("Test for doctors notes");
 	String dob1 = "01/08/1985";
 	String dob2 = "20/11/1992";
@@ -94,7 +98,7 @@ public class EPS {
 	System.out.println(patient1);//works good now
 	System.out.println(patient1.getHealthCareCard());
 	
-	Pharmacy pharmacy1 = new Pharmacy(3001,address1);
+	Pharmacy pharmacy1 = new Pharmacy("pTest","pTest",address1);
 	
 	pharmacy1.setStockList(medication2, 32);
 	System.out.println(pharmacy1);
@@ -110,8 +114,45 @@ public class EPS {
 	medication.add(medication1);
 	medication.add(medication2);
 	
+//	ArrayList<Pharmacy> pharmacyList = new ArrayList<>();
+//	pharmacyList.add(pharmacy1);
+//	
+//	FileOutputStream pharmacies = new FileOutputStream("pharmacy.txt");
+//	ObjectOutputStream pharmacyOutput = new ObjectOutputStream(pharmacies);
+//	pharmacyOutput.writeObject(pharmacyList);
+//	pharmacyOutput.close();
 	
-	
+//	Prescription prescription = new Prescription("Test Diagnosis", patient1, doctor1, imageName, "Test Dr Notes");
+//	ArrayList<Prescription> prescriptionList = new ArrayList<>();
+//	prescriptionList.add(prescription);
+//	try {
+//		FileOutputStream prescriptions = new FileOutputStream("prescriptions.txt");
+//		ObjectOutputStream prescriptionOutput = new ObjectOutputStream(prescriptions);
+//		prescriptionOutput.writeObject(prescriptionList);
+//		prescriptionOutput.close();
+//		
+//	} catch (IOException e1) {
+//		// TODO Auto-generated catch block
+//		e1.printStackTrace();
+//	}
+//	
+	/*
+	 * ArrayList<Prescription> prescriptionList = new ArrayList<>(); try {
+	 * FileInputStream prescriptions = new FileInputStream("prescriptions.txt");
+	 * ObjectInputStream prescriptionsIn = new ObjectInputStream(prescriptions);
+	 * 
+	 * prescriptionList = (ArrayList<Prescription>) prescriptionsIn.readObject();
+	 * prescriptionsIn.close(); } catch (IOException | ClassNotFoundException e) {
+	 * // TODO Auto-generated catch block e.printStackTrace(); } for (int i = 0; i <
+	 * prescriptionList.size();i++) {
+	 * System.out.println(prescriptionList.get(i).getDiagnosis());
+	 * System.out.println(prescriptionList.get(i).getDrNotes());
+	 * System.out.println(prescriptionList.get(i).getQrCode());
+	 * System.out.println(prescriptionList.get(i).getPatient().getFirstName() + " "
+	 * + prescriptionList.get(i).getPatient().getLastName());
+	 * System.out.println(prescriptionList.get(i).getDoctor().getFirstName() + " " +
+	 * prescriptionList.get(i).getDoctor().getLastName()); }
+	 */
 	
 //	try {
 //		FileInputStream patients = new FileInputStream("patients.txt");
@@ -135,23 +176,27 @@ public class EPS {
 	
 	
 	
-	//try {
-		//FileOutputStream patients = new FileOutputStream("patients.txt");
+//	try {
+	//	FileOutputStream patients = new FileOutputStream("patients.txt");
+	//	FileOutputStream doctorList = new FileOutputStream("doctors.txt");
 		//FileOutputStream medications = new FileOutputStream("medications.txt");
 		
-		//ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
+	//	ObjectOutputStream doctorsOutput = new ObjectOutputStream(doctorList);
+	//	ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
 		//ObjectOutputStream medicationOutput = new ObjectOutputStream(medications);
 		
+	//	doctorsOutput.writeObject(doctors);
 	//	patientsOutput.writeObject(patient);
 		//medicationOutput.writeObject(medication);
-	//	patientsOutput.close();
+	//	doctorsOutput.close();
+		//	patientsOutput.close();
 		//medicationOutput.close();
 		
 //	} catch (IOException e) {
 		// TODO Auto-generated catch block
 //		e.printStackTrace();
 //	}
-	
+	//System.out.println(patient.size());
 	}
 	
 }

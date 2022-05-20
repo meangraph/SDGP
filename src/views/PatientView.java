@@ -36,6 +36,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Font;
 
 public class PatientView extends JFrame {
 
@@ -53,6 +54,9 @@ public class PatientView extends JFrame {
 	private int patientIndex;
 	ArrayList<Medication> medsList = new ArrayList<Medication>();
 	private JTextField tfAllergiesSearch;
+	private JTextField tfMedicareNumber1;
+	private JTextField tfPrivateHealthNo1;
+	private JTextField tfPensionerNumber1;
 
 	/**
 	 * Launch the application.
@@ -95,6 +99,7 @@ public class PatientView extends JFrame {
 			e.printStackTrace();
 		}
 		setTitle("Evolve - Signed in as: " + currentPatient.getFirstName() + " " +currentPatient.getLastName());
+		
 		initComponents();
 		initEvents();
 	}
@@ -198,9 +203,11 @@ public class PatientView extends JFrame {
 		scrollPane_1.setBounds(426, 145, 125, 58);
 		panel.add(scrollPane_1);
 		
-		JLabel lblContraMeds = new JLabel("Contra-Indications - N/A");
-		lblContraMeds.setBounds(235, 535, 316, 14);
+		JLabel lblContraMeds = new JLabel("Contra-Indications:");
+		lblContraMeds.setBounds(218, 535, 110, 14);
 		panel.add(lblContraMeds);
+		
+		
 		
 		medsTable = new JTable();
 		medsTable.setBackground(Color.WHITE);
@@ -226,11 +233,44 @@ public class PatientView extends JFrame {
 		
 		DefaultTableModel model = (DefaultTableModel) medsTable.getModel();
 		
+		for (int i = 0; i < currentPatient.getCurrentMedicationsMap().size();i++) {
+			if (currentPatient.getCurrentMedicationsMap().size() == 0) {
+				break;
+			}
+			for (Medication meds : currentPatient.getCurrentMedicationsMap().keySet()) {
+				for (String str : currentPatient.getCurrentMedicationsMap().values()) {
+					model.addRow(new Object[] {meds,meds.isControlled(),str,currentPatient.getFrequency(),currentPatient.getDiagnosisListAt(i)});
+				}
+			}
+		}
+		
+		JLabel lblContraList = new JLabel("");
+		lblContraList.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblContraList.setBounds(330, 535, 255, 14);
+		panel.add(lblContraList);
+		
+		ArrayList<String> contraName = new ArrayList<>();
+		
 		JList medList = new JList(medsList.toArray());
 		medList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Medication meds = medsList.get(medList.getSelectedIndex());
+				String medName = meds.getBrandName();
+				contraName.add(meds.getContraMedications());
+				
+				
+					
+				for(int i = 0; i < contraName.size();i++) {
+				
+						//System.out.println("med 1 brandname " +med1+ " med 1 contra " +med2);
+						System.out.println("Med Name : " + medName + " contraName : " + contraName.get(i));
+						//System.out.println("med 2 brandname " +med2 + " med 2 contra " +med2);
+						if(contraName.contains(medName)) {
+							lblContraList.setText(medName + " interacts with " + contraName.get(i));
+					} 
+				}
+				
 				model.addRow(new Object [] {meds,meds.isControlled(),"","","","",""});
 					
 			}
@@ -360,8 +400,10 @@ public class PatientView extends JFrame {
 				System.out.println("Row count: "+model.getRowCount());
 				for (int row = 0; row < model.getRowCount();row++) {
 					int column = 0;
+					currentPatient.removeAllMedications();
 					currentPatient.addMedications((Medication) model.getValueAt(row, column), model.getValueAt(row, column+2).toString());
 					currentPatient.addDiagnosis(model.getValueAt(row, column+4).toString());
+					currentPatient.setFrequency((String) model.getValueAt(row, column+3));
 					currentPatient.getDiagnosis();
 					System.out.println("Row "+row);
 					
@@ -405,18 +447,83 @@ public class PatientView extends JFrame {
 		panel.add(btnSave);
 		
 		
+		
+		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
 		tabbedPane.addTab("Medical History", null, panel_1, null);
 		panel_1.setLayout(null);
+		
+		JLabel lblFName_1 = new JLabel("First Name:");
+		lblFName_1.setBounds(10, 11, 76, 14);
+		panel_1.add(lblFName_1);
+		
+		JLabel lblLastName_1 = new JLabel("Last Name:");
+		lblLastName_1.setBounds(10, 36, 76, 14);
+		panel_1.add(lblLastName_1);
+		
+		JLabel lblAge_1 = new JLabel("Age:");
+		lblAge_1.setBounds(38, 61, 28, 14);
+		panel_1.add(lblAge_1);
+		
+		JLabel lblSex_1 = new JLabel("Sex:");
+		lblSex_1.setBounds(38, 85, 28, 14);
+		panel_1.add(lblSex_1);
+		
+		JLabel lblUserFName_1 = new JLabel(currentPatient.getFirstName());
+		lblUserFName_1.setBounds(96, 11, 103, 14);
+		panel_1.add(lblUserFName_1);
+		
+		JLabel lblUserLName_1 = new JLabel(currentPatient.getLastName());
+		lblUserLName_1.setBounds(96, 36, 103, 14);
+		panel_1.add(lblUserLName_1);
+		
+		JLabel lbluserAge_1 = new JLabel(currentPatient.getAge());
+		lbluserAge_1.setBounds(96, 61, 103, 14);
+		panel_1.add(lbluserAge_1);
+		
+		JLabel lbluserSex_1 = new JLabel(currentPatient.getSex());
+		lbluserSex_1.setBounds(96, 85, 103, 14);
+		panel_1.add(lbluserSex_1);
+		
+		tfMedicareNumber1 = new JTextField();
+		tfMedicareNumber1.setText("Medicare Number: " + currentPatient.getMedicareNumber());
+		tfMedicareNumber1.setEditable(false);
+		tfMedicareNumber1.setColumns(10);
+		tfMedicareNumber1.setBackground(Color.LIGHT_GRAY);
+		tfMedicareNumber1.setBounds(402, 11, 170, 20);
+		panel_1.add(tfMedicareNumber1);
+		
+		tfPrivateHealthNo1 = new JTextField();
+		tfPrivateHealthNo1.setText("Private Health No: " + currentPatient.getPrivateHealthCareNumber());
+		tfPrivateHealthNo1.setEditable(false);
+		tfPrivateHealthNo1.setColumns(10);
+		tfPrivateHealthNo1.setBackground(Color.LIGHT_GRAY);
+		tfPrivateHealthNo1.setBounds(402, 40, 170, 20);
+		panel_1.add(tfPrivateHealthNo1);
+		
+		tfPensionerNumber1 = new JTextField();
+		tfPensionerNumber1.setText("Pensioner Number: " + currentPatient.getPensionerNumber());
+		tfPensionerNumber1.setEditable(false);
+		tfPensionerNumber1.setColumns(10);
+		tfPensionerNumber1.setBackground(Color.LIGHT_GRAY);
+		tfPensionerNumber1.setBounds(402, 71, 170, 20);
+		panel_1.add(tfPensionerNumber1);
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Pathology History", null, panel_2, null);
 		panel_2.setLayout(null);
+		if (currentPatient.getPrivateHealthCareNumber() == 0) {
+			txtPrivateHealthNumber.setVisible(false);
+		} 
+		if (currentPatient.getPensionerNumber() == 0) {
+			txtPensioner.setVisible(false);
+		} 
 		
 	}
 
 	private void initEvents() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

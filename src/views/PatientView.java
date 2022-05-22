@@ -37,6 +37,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class PatientView extends JFrame {
 
@@ -280,7 +282,23 @@ public class PatientView extends JFrame {
 		scrollPane_1.setVisible(false);
 		medList.setVisible(false);
 		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setVisible(false);
+		//Calls the search method in Medication
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel searchQueryListModel = new DefaultListModel();
+				ArrayList<Medication> serachResult = Medication.searchMedication(tfSearch.getText(), medsList);
+				//Adds the results of search to the list
+				for(Medication med: serachResult) {
+					searchQueryListModel.addElement(med.getBrandName());
+				}
+				medList.setModel(searchQueryListModel);
+			}
+		});
 		
+		btnSearch.setBounds(330, 178, 86, 23);
+		panel.add(btnSearch);
 		
 		JButton btnAddMeds = new JButton("Add Medication");
 		btnAddMeds.addActionListener(new ActionListener() {
@@ -288,6 +306,7 @@ public class PatientView extends JFrame {
 				scrollPane_1.setVisible(true);
 				medList.setVisible(true);
 				tfSearch.setVisible(true);
+				btnSearch.setVisible(true);
 				
 			}
 		});
@@ -299,6 +318,15 @@ public class PatientView extends JFrame {
 		panel.add(lblNewLabel);
 		
 		tfSearch = new JTextField();
+		tfSearch.addInputMethodListener(new InputMethodListener() {
+			public void caretPositionChanged(InputMethodEvent event) {
+				System.out.print("kappa");
+			}
+			public void inputMethodTextChanged(InputMethodEvent event) {
+				System.out.print("kappa");
+
+			}
+		});
 		tfSearch.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -374,12 +402,15 @@ public class PatientView extends JFrame {
 		tfAllergiesSearch.setColumns(10);
 		tfAllergiesSearch.setVisible(false);
 		
+		JButton btnAllergySearch = new JButton("Search");
+		
 		JButton btnAddAllergies = new JButton("Add Allergies");
 		btnAddAllergies.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				medslist2.setVisible(true);
 				scrollPane_3.setVisible(true);
 				tfAllergiesSearch.setVisible(true);
+				btnAllergySearch.setVisible(true);
 			}
 		});
 		btnAddAllergies.setBounds(150, 408, 131, 23);
@@ -445,6 +476,23 @@ public class PatientView extends JFrame {
 		
 		btnSave.setBounds(236, 616, 89, 23);
 		panel.add(btnSave);
+		
+
+		
+		btnAllergySearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel searchQueryListModel = new DefaultListModel();
+				ArrayList<Medication> serachResult = Medication.searchMedication(tfAllergiesSearch.getText(), medsList);
+				//Adds the results of search to the list
+				for(Medication med: serachResult) {
+					searchQueryListModel.addElement(med.getBrandName());
+				}
+				medslist2.setModel(searchQueryListModel);
+			}
+		});
+		btnAllergySearch.setVisible(false);
+		btnAllergySearch.setBounds(330, 445, 86, 23);
+		panel.add(btnAllergySearch);
 		
 		
 		

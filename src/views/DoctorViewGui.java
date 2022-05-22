@@ -14,6 +14,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -60,6 +61,7 @@ public class DoctorViewGui extends JFrame {
 	ArrayList<Medication> medsList = new ArrayList<Medication>();
 	private JTable prescriptionTable;
 	private JTable contraTable;
+	private JTextField tfSearch;
 
 	/**
 	 * Launch the application.
@@ -530,11 +532,14 @@ public class DoctorViewGui extends JFrame {
 		scrollPane_5.setViewportView(addMedList);
 		addMedList.setVisible(false);
 		
+		JButton btnSearch = new JButton("Search");
 		JButton btnAddMeds = new JButton("Add Medication");
 		btnAddMeds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollPane_5.setVisible(true);
 				addMedList.setVisible(true);
+				tfSearch.setVisible(true);
+				btnSearch.setVisible(true);
 				
 				
 			}
@@ -662,6 +667,28 @@ public class DoctorViewGui extends JFrame {
 		contentPane.setLayout(null);
 		btnCreatePrescription.setBounds(191, 409, 147, 23);
 		panel.add(btnCreatePrescription);
+		
+		tfSearch = new JTextField();
+		tfSearch.setText("Search Here");
+		tfSearch.setBounds(638, 60, 74, 20);
+		tfSearch.setVisible(false);
+		panel.add(tfSearch);
+		tfSearch.setColumns(10);
+		
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel searchQueryListModel = new DefaultListModel();
+				ArrayList<Medication> serachResult = Medication.searchMedication(tfSearch.getText(), medsList);
+				//Adds the results of search to the list
+				for(Medication med: serachResult) {
+					searchQueryListModel.addElement(med.getBrandName());
+				}
+				addMedList.setModel(searchQueryListModel);
+			}
+		});
+		btnSearch.setVisible(false);
+		btnSearch.setBounds(722, 57, 78, 23);
+		panel.add(btnSearch);
 		contentPane.add(tabbedPane);
 	}
 }

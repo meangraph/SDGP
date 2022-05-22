@@ -93,4 +93,18 @@ public class Medication implements Serializable{
 		
 		return medList;
 	}
+	
+	//Method for searching for Medication in a give list of Medications
+	public static ArrayList<Medication> searchMedication (String inputSearch, ArrayList<Medication> inputMedications) {
+		ArrayList<Medication> output = new ArrayList<Medication>();
+		for(Medication med : inputMedications) {
+			
+			if(med.getBrandName().contains(inputSearch)) {
+				output.add(med);
+			}
+		}
+		return output;
+		
+	}
+	
 }

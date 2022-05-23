@@ -45,6 +45,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class DoctorViewGui extends JFrame {
 
@@ -62,6 +64,7 @@ public class DoctorViewGui extends JFrame {
 	private JTable prescriptionTable;
 	private JTable contraTable;
 	private JTextField tfSearch;
+	private JTable tblPrescription;
 
 	/**
 	 * Launch the application.
@@ -102,6 +105,17 @@ public class DoctorViewGui extends JFrame {
 			medsIn.close();
 			objectIn.close();
 			doctorsIn.close();
+			/*
+			DefaultTableModel model = (DefaultTableModel) tblPrescription.getModel();
+			for(Prescription pre: currentPatient.getPrescriptionList()) {
+
+				for(Medication med: pre.getPrescriptionMedications().keySet()) {
+					model.addRow(new Object[]{med.getBrandName(), pre.getPrescriptionMedications().get(med), 1, 1});
+				}
+			}
+			*/
+			//tblPrescription.setModel(null);
+			
 			
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -118,6 +132,11 @@ public class DoctorViewGui extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+
+			}
+		});
 		tabbedPane.setBounds(5, 5, 815, 551);
 		
 		
@@ -322,10 +341,32 @@ public class DoctorViewGui extends JFrame {
 		tabbedPane.addTab("Past Prescriptions", null, panelPastPrescriptions, null);
 		panelPastPrescriptions.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(36, 44, 73, 25);
-		panelPastPrescriptions.add(lblNewLabel);
+		JScrollPane scrollPane_6 = new JScrollPane();
+		scrollPane_6.setBounds(10, 37, 522, 292);
+		panelPastPrescriptions.add(scrollPane_6);
 		
+		tblPrescription = new JTable();
+		scrollPane_6.setViewportView(tblPrescription);
+		tblPrescription.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Drug", "Strength", "Quantity", "Frequency"
+			}
+		));
+		try {
+			DefaultTableModel model = (DefaultTableModel) tblPrescription.getModel();
+			for(Prescription pre: currentPatient.getPrescriptionList()) {
+	
+				for(Medication med: pre.getPrescriptionMedications().keySet()) {
+					model.addRow(new Object[]{med.getBrandName(), pre.getPrescriptionMedications().get(med), 1, 1});
+				}
+			}
+		}
+		catch(NullPointerException e) {
+			System.out.print("error resolving prescription list");
+		}
+			
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		tabbedPane.addTab("+Create New Treatment Plan", null, panel, null);

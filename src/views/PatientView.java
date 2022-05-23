@@ -257,7 +257,7 @@ public class PatientView extends JFrame {
 		medList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Medication meds = medsList.get(medList.getSelectedIndex());
+				Medication meds = Medication.searchSingleMedication(medList.getSelectedValue().toString(), medsList);
 				String medName = meds.getBrandName();
 				contraName.add(meds.getContraMedications());
 				
@@ -273,7 +273,7 @@ public class PatientView extends JFrame {
 					} 
 				}
 				
-				model.addRow(new Object [] {meds,meds.isControlled(),"","","","",""});
+				model.addRow(new Object [] {meds.getBrandName(),meds.isControlled(),meds,"","","",""});
 					
 			}
 		});

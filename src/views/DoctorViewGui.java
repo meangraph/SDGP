@@ -14,6 +14,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -44,6 +45,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class DoctorViewGui extends JFrame {
 
@@ -60,7 +65,10 @@ public class DoctorViewGui extends JFrame {
 	ArrayList<Medication> medsList = new ArrayList<Medication>();
 	private JTable prescriptionTable;
 	private JTable contraTable;
-
+	private JTextField tfSearch;
+	private JTable tblPrescription;
+	ArrayList<Patient> patientList = new ArrayList<Patient>();
+	int index;
 	/**
 	 * Launch the application.
 	 */
@@ -91,7 +99,7 @@ public class DoctorViewGui extends JFrame {
 			FileInputStream medication = new FileInputStream("medications.txt");
 			FileInputStream doctor = new FileInputStream("doctors.txt");
 			ObjectInputStream doctorsIn = new ObjectInputStream(doctor);
-			ArrayList<Patient> patientList = (ArrayList<Patient>) objectIn.readObject();
+			patientList = (ArrayList<Patient>) objectIn.readObject();
 			ArrayList<Doctor> doctorsList = (ArrayList<Doctor>) doctorsIn.readObject();
 			ObjectInputStream medsIn = new ObjectInputStream(medication);
 			medsList = (ArrayList<Medication>) medsIn.readObject();
@@ -100,6 +108,54 @@ public class DoctorViewGui extends JFrame {
 			medsIn.close();
 			objectIn.close();
 			doctorsIn.close();
+			/*
+			DefaultTableModel model = (DefaultTableModel) tblPrescription.getModel();
+			for(Prescription pre: currentPatient.getPrescriptionList()) {
+
+				for(Medication med: pre.getPrescriptionMedications().keySet()) {
+					model.addRow(new Object[]{med.getBrandName(), pre.getPrescriptionMedications().get(med), 1, 1});
+				}
+			}
+			*/
+			//tblPrescription.setModel(null);
+			index = x;
+			
+			
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setTitle("Evolve - Signed in as: Dr." + currentDoctor.getFirstName() + " " +currentDoctor.getLastName());
+		initComponents();
+	}
+	
+	public DoctorViewGui(int x, int y) {
+		try {
+			FileInputStream patients = new FileInputStream("patients.txt");
+			ObjectInputStream objectIn = new ObjectInputStream(patients);
+			FileInputStream medication = new FileInputStream("medications.txt");
+			FileInputStream doctor = new FileInputStream("doctors.txt");
+			ObjectInputStream doctorsIn = new ObjectInputStream(doctor);
+			patientList = (ArrayList<Patient>) objectIn.readObject();
+			ArrayList<Doctor> doctorsList = (ArrayList<Doctor>) doctorsIn.readObject();
+			ObjectInputStream medsIn = new ObjectInputStream(medication);
+			medsList = (ArrayList<Medication>) medsIn.readObject();
+			currentPatient = patientList.get(y);
+			currentDoctor = doctorsList.get(x);
+			medsIn.close();
+			objectIn.close();
+			doctorsIn.close();
+			/*
+			DefaultTableModel model = (DefaultTableModel) tblPrescription.getModel();
+			for(Prescription pre: currentPatient.getPrescriptionList()) {
+
+				for(Medication med: pre.getPrescriptionMedications().keySet()) {
+					model.addRow(new Object[]{med.getBrandName(), pre.getPrescriptionMedications().get(med), 1, 1});
+				}
+			}
+			*/
+			//tblPrescription.setModel(null);
+			
 			
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -111,11 +167,16 @@ public class DoctorViewGui extends JFrame {
 	
 	public void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 833, 600);
+		setBounds(100, 100, 948, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+
+			}
+		});
 		tabbedPane.setBounds(5, 5, 815, 551);
 		
 		
@@ -320,10 +381,34 @@ public class DoctorViewGui extends JFrame {
 		tabbedPane.addTab("Past Prescriptions", null, panelPastPrescriptions, null);
 		panelPastPrescriptions.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(36, 44, 73, 25);
-		panelPastPrescriptions.add(lblNewLabel);
+		JScrollPane scrollPane_6 = new JScrollPane();
+		scrollPane_6.setBounds(10, 37, 522, 292);
+		panelPastPrescriptions.add(scrollPane_6);
 		
+		tblPrescription = new JTable();
+		scrollPane_6.setViewportView(tblPrescription);
+		tblPrescription.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Drug", "Strength", "Quantity", "Frequency"
+			}
+		));
+		try {
+			DefaultTableModel model = (DefaultTableModel) tblPrescription.getModel();
+/*
+			for(Prescription pre: currentPatient.getPrescriptionList()) {
+	
+				for(Medication med: pre.getPrescriptionMedications().keySet()) {
+					model.addRow(new Object[]{med.getBrandName(), pre.getPrescriptionMedications().get(med), 1, 1});
+				}
+			}
+		*/
+		}
+		catch(NullPointerException e) {
+			System.out.print("error resolving prescription list");
+		}
+			
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		tabbedPane.addTab("+Create New Treatment Plan", null, panel, null);
@@ -530,11 +615,14 @@ public class DoctorViewGui extends JFrame {
 		scrollPane_5.setViewportView(addMedList);
 		addMedList.setVisible(false);
 		
+		JButton btnSearch = new JButton("Search");
 		JButton btnAddMeds = new JButton("Add Medication");
 		btnAddMeds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollPane_5.setVisible(true);
 				addMedList.setVisible(true);
+				tfSearch.setVisible(true);
+				btnSearch.setVisible(true);
 				
 				
 			}
@@ -637,6 +725,20 @@ public class DoctorViewGui extends JFrame {
 					prescription.setRepeats((int) medTableModel.getValueAt(i, 2));
 					prescription.setFrequency((String) medTableModel.getValueAt(i, 3));
 				}
+			
+				patientList.set(index, currentPatient);
+				
+				FileOutputStream patients;
+				try {
+					patients = new FileOutputStream("patients.txt");
+					ObjectOutputStream patientsOutput = new ObjectOutputStream(patients);
+					patientsOutput.writeObject(patientList);
+					patientsOutput.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		
 //				System.out.println(treatmentPlan.getDiagnosis());
 //				System.out.println(currentPatient.getCurrentMeds());
 //				System.out.println(treatmentPlan.getPatientMeds());
@@ -662,6 +764,55 @@ public class DoctorViewGui extends JFrame {
 		contentPane.setLayout(null);
 		btnCreatePrescription.setBounds(191, 409, 147, 23);
 		panel.add(btnCreatePrescription);
+		
+		tfSearch = new JTextField();
+		tfSearch.setText("Search Here");
+		tfSearch.setBounds(638, 60, 74, 20);
+		tfSearch.setVisible(false);
+		panel.add(tfSearch);
+		tfSearch.setColumns(10);
+		
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel searchQueryListModel = new DefaultListModel();
+				ArrayList<Medication> serachResult = Medication.searchMedication(tfSearch.getText(), medsList);
+				//Adds the results of search to the list
+				for(Medication med: serachResult) {
+					searchQueryListModel.addElement(med.getBrandName());
+				}
+				addMedList.setModel(searchQueryListModel);
+			}
+		});
+		btnSearch.setVisible(false);
+		btnSearch.setBounds(722, 57, 78, 23);
+		panel.add(btnSearch);
 		contentPane.add(tabbedPane);
+		
+		JLabel lblPatient = new JLabel("Patient");
+		lblPatient.setBounds(830, 34, 46, 14);
+		contentPane.add(lblPatient);
+		
+		JComboBox cmbPatients = new JComboBox();
+		cmbPatients.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		cmbPatients.setBounds(830, 48, 92, 22);
+		contentPane.add(cmbPatients);
+		
+		JButton btnChangePatient = new JButton("Change");
+		btnChangePatient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorViewGui dview = new DoctorViewGui(index, cmbPatients.getSelectedIndex());
+				dview.setVisible(true);
+				dispose();
+			}
+		});
+		btnChangePatient.setBounds(830, 80, 92, 23);
+		contentPane.add(btnChangePatient);
+		for(Patient pat: patientList) {
+			cmbPatients.addItem(pat.getFirstName() +" " +  pat.getLastName());
+		}
 	}
 }

@@ -35,6 +35,8 @@ public class Patient implements Serializable{
 	private ArrayList<Procedures> procedureList = new ArrayList<Procedures>();
 	private ArrayList<String> diagnosisList = new ArrayList<String>();
 	private ArrayList<String> frequency = new ArrayList<String>();
+	private ArrayList<Prescription> prescriptionList = new ArrayList<>();
+
 	
 	
 	public Patient() {}
@@ -65,7 +67,6 @@ public class Patient implements Serializable{
 	public int getPensionerNumber() {
 		return pensionerNumber;
 	}
-
 
 	public void setMedicareNumber(int medicareNumber) {
 		this.medicareNumber = medicareNumber;
@@ -164,6 +165,18 @@ public class Patient implements Serializable{
 		procedureList.add(x);
 	}
 
+
+	public ArrayList<Prescription> getPrescriptionList() {
+		return prescriptionList;
+	}
+
+	public void prescriptionList(ArrayList<Prescription> prescriptionList) {
+		this.prescriptionList = prescriptionList;
+	}
+	
+	public void setPrescriptionList(Prescription x) {
+		prescriptionList.add(x);
+	}
 
 	public String getSex() {
 		return sex;
@@ -296,7 +309,11 @@ public class Patient implements Serializable{
 			for (Map.Entry<Medication,String> m: currentMedications.entrySet()) {
 				for (int i = 0; i < diagnosisList.size();i++) {
 					int index = 0;
+					try {
 				currentMeds += ((Medication)m.getKey()).getBrandName() + ": " + m.getValue() + " " + frequency.get(index) + " for " + diagnosisList.get(index) + "\n";
+					}catch(IndexOutOfBoundsException e) {
+						System.out.print("No medications for patients");
+					}
 				index++;
 			}
 			}

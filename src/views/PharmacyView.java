@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -213,14 +214,11 @@ public class PharmacyView extends JFrame {
 						lblDrAddress.setText(prescription.getDoctor().getAddress().toString());
 						lblDrName.setText("Dr." + prescription.getDoctor().getFirstName() + " " + prescription.getDoctor().getLastName());
 						
-						for (int j = 0; j < prescription.getPrescriptionMedications().size();j++) {
-						for (Medication meds: prescription.getPrescriptionMedications().keySet()) {
-							for (String str : prescription.getPrescriptionMedications().values()) {
-								System.out.println(meds);
-								System.out.println(str);
-								model.addRow(new Object[]{meds,str,prescription.getRepeats(j),prescription.getFrequency(j)});
-							}
-						}
+						int j = 0;
+						for(Entry<Medication, String> set: prescription.getPrescriptionMedications().entrySet()) {
+							model.addRow(new Object[]{set.getKey(),set.getValue(),prescription.getRepeats(j),prescription.getFrequency(j)});
+							j++;
+						
 						}
 					}
 				}
@@ -232,6 +230,15 @@ public class PharmacyView extends JFrame {
 		});
 		btnSearch.setBounds(469, 90, 89, 23);
 		contentPane.add(btnSearch);
+		
+		JButton btnNewButton = new JButton("Dispense Prescription");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Medications dispensed");
+			}
+		});
+		btnNewButton.setBounds(22, 416, 172, 23);
+		contentPane.add(btnNewButton);
 		
 		
 	}
